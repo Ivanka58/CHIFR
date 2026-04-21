@@ -37,14 +37,19 @@ body {
 
 /* Стили для сплеш-экрана */
 .logo {
-    font-size: 120px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #3A1C71, #00E5FF);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 30px;
-    letter-spacing: -5px;
+    width: 180px;          /* Ширина логотипа */
+    height: 180px;         /* Высота логотипа */
+    margin: 0 auto 30px;   /* Отступы: сверху 0, по бокам авто, снизу 30px */
+    display: flex;         /* Для центровки картинки внутри */
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    max-width: 100%;       /* Картинка не вылезет за пределы родителя */
+    max-height: 100%;
+    object-fit: contain;   /* Сохраняем пропорции, даже если картинка квадратная */
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.3)); /* Твоё фирменное свечение! */
 }
 
 .tagline {
