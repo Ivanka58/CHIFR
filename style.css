@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0A0F1D 0%, #1A0F2E 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Стили для сплеш-экрана */
+.logo {
+    font-size: 120px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3A1C71, #00E5FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 30px;
+    letter-spacing: -5px;
+}
+
+.tagline {
+    font-size: 24px;
+    color: #8E9AAF;
+    margin-bottom: 60px;
+    min-height: 70px;
+    font-weight: 300;
+}
+
+.btn-start {
+    background: transparent;
+    border: 1px solid #3A1C71;
+    color: #00E5FF;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-start:hover {
+    background: #3A1C71;
+    color: white;
+    border-color: #00E5FF;
+    box-shadow: 0 0 15px rgba(0,229,255,0.3);
+}
+
+/* Стили для экрана входа */
+h1 {
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #fff, #8E9AAF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.language-selector {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.lang-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #3A1C71;
+    padding: 10px 25px;
+    border-radius: 50px;
+    color: #8E9AAF;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.lang-btn.active {
+    background: #3A1C71;
+    color: white;
+    border-color: #00E5FF;
+    box-shadow: 0 0 10px rgba(58,28,113,0.5);
+}
+
+.phone-input-area {
+    margin-bottom: 30px;
+}
+
+.phone-input {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #3A1C71;
+    border-radius: 50px;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.phone-input:focus {
+    outline: none;
+    border-color: #00E5FF;
+    box-shadow: 0 0 15px rgba(0,229,255,0.2);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: #3A1C71;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary:disabled {
+    background: #2a2a3a;
+    color: #5a5a7a;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-primary:not(:disabled):hover {
+    background: #00E5FF;
+    color: #0A0F1D;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0,229,255,0.4);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
