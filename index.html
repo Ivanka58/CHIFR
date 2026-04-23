@@ -3,31 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Шрифт — начало</title>
+    <title>Шрифт — твой безопасный мессенджер</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Экран 1: Приветствие -->
+    <div class="app">
+        <!-- ЭКРАН 1: ПРИВЕТСТВИЕ -->
         <div id="splash-screen" class="screen active">
-            <div class="logo">
-    <img src="logo.png" alt="Shrifft Logo">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="logo-text">Ш</div>
             </div>
-            <div class="tagline" id="tagline"></div>
-            <button id="get-started-btn" class="btn-start">Продолжить</button>
+            <h1>Шрифт</h1>
+            <p class="tagline">Твой разговор. Твои правила.</p>
+            <button id="start-btn" class="btn-primary btn-large">Начать</button>
         </div>
 
-        <!-- Экран 2: Вход -->
+        <!-- ЭКРАН 2: ВХОД ПО НОМЕРУ -->
         <div id="login-screen" class="screen">
-            <h1>Добро пожаловать</h1>
-            <div class="language-selector">
-                <button class="lang-btn active" data-lang="ru">🇷🇺 Русский</button>
-                <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+            <button class="btn-back" id="back-from-login">← Назад</button>
+            <div class="screen-content">
+                <h2>Добро пожаловать</h2>
+                <p class="desc">Введите номер телефона для входа</p>
+                <div class="phone-input-group">
+                    <span class="country-code">+7</span>
+                    <input type="tel" id="phone-number" class="phone-input" placeholder="___ ___ __ __" maxlength="10" inputmode="numeric">
+                </div>
+                <button id="request-code-btn" class="btn-primary" disabled>Продолжить</button>
             </div>
-            <div class="phone-input-area">
-                <input type="tel" id="phone-number" placeholder="+7  ___  ___  __  __" class="phone-input">
+        </div>
+
+        <!-- ЭКРАН 3: ВВОД КОДА -->
+        <div id="code-screen" class="screen">
+            <button class="btn-back" id="back-from-code">← Назад</button>
+            <div class="screen-content">
+                <h2>Подтверждение</h2>
+                <p class="desc">Введите код из SMS. Для теста: <strong>1234</strong></p>
+                <div class="code-input-group">
+                    <input type="text" id="code-input" class="code-input" maxlength="4" placeholder="____" inputmode="numeric">
+                </div>
+                <button id="verify-code-btn" class="btn-primary" disabled>Войти</button>
             </div>
-            <button id="get-code-btn" class="btn-primary" disabled>Получить код</button>
+        </div>
+
+        <!-- ЭКРАН 4: ОСНОВНОЙ ИНТЕРФЕЙС (чат, профиль, настройки) -->
+        <div id="main-screen" class="screen">
+            <!-- Нижнее меню -->
+            <nav class="bottom-menu">
+                <button class="menu-btn" data-tab="chats">
+                    <span class="menu-icon">💬</span>
+                    <span class="menu-label">Чаты</span>
+                </button>
+                <button class="menu-btn" data-tab="profile">
+                    <span class="menu-icon">👤</span>
+                    <span class="menu-label">Профиль</span>
+                </button>
+                <button class="menu-btn" data-tab="settings">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-label">Настройки</span>
+                </button>
+            </nav>
+
+            <div class="main-content">
+                <!-- Вкладка ЧАТЫ -->
+                <div id="chats-tab" class="tab-content active">
+                    <div class="chat-list">
+                        <div class="chat-item" data-chat-id="test">
+                            <div class="chat-avatar">Ш</div>
+                            <div class="chat-info">
+                                <div class="chat-name">Шрифт Тест</div>
+                                <div class="chat-last-msg">Напиши мне что-нибудь...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка ПРОФИЛЬ -->
+                <div id="profile-tab" class="tab-content">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-name" id="profile-name">Иван</div>
+                        <div class="profile-status" id="profile-status">Онлайн</div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <span class="info-label">Имя</span>
+                            <span class="info-value" id="info-name">Иван</span>
+                            <button class="edit-btn" data-field="name">✎</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Статус</span>
+                            <span class="info-value" id="info-status">Онлайн</span>
+                            <button class="edit-btn" data-field="status">✎</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Телефон</span>
+                            <span class="info-value" id="info-phone">+7 123 456 78 90</span>
+                            <button class="edit-btn" data-field="phone">✎</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка НАСТРОЙКИ -->
+                <div id="settings-tab" class="tab-content">
+                    <div class="settings-group">
+                        <div class="settings-title">Киберзащита</div>
+                        <div class="setting-item">
+                            <span class="setting-label">Двойное дно (Shadow Profile)</span>
+                            <label class="switch">
+                                <input type="checkbox" class="setting-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Смена иконки (Маскировка)</span>
+                            <label class="switch">
+                                <input type="checkbox" class="setting-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Панический код</span>
+                            <label class="switch">
+                                <input type="checkbox" class="setting-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <div class="settings-title">Конфиденциальность</div>
+                        <div class="setting-item">
+                            <span class="setting-label">Скрытый вход по ритму</span>
+                            <label class="switch">
+                                <input type="checkbox" class="setting-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Защита от подглядывания</span>
+                            <label class="switch">
+                                <input type="checkbox" class="setting-checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Окно ЧАТА (попап) -->
+    <div id="chat-window" class="chat-window hidden">
+        <div class="chat-header">
+            <button id="close-chat" class="btn-back-chat">←</button>
+            <div class="chat-contact">
+                <div class="chat-contact-avatar">Ш</div>
+                <div class="chat-contact-info">
+                    <div class="chat-contact-name">Шрифт Тест</div>
+                    <div class="chat-contact-status">в сети</div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Сообщения будут добавляться сюда -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Сообщение...">
+            <button id="send-msg-btn" class="btn-send">➤</button>
         </div>
     </div>
 
