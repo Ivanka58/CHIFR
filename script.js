@@ -1,38 +1,6 @@
-// Массив фраз для печатной машинки
-const phrases = [
-    "Твой разговор. Твои правила.",
-    "Твой код. Твоя защита.",
-    "Говори свободно."
-];
-let phraseIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-const taglineElement = document.getElementById('tagline');
+// ---------- РАБОТА С ЭКРАНАМИ И МЕНЮ ----------
+let currentPhone = "";
 
-// Эффект печатной машинки
-function typeEffect() {
-    const currentPhrase = phrases[phraseIndex];
-    if (isDeleting) {
-        taglineElement.textContent = currentPhrase.substring(0, charIndex - 1);
-        charIndex--;
-    } else {
-        taglineElement.textContent = currentPhrase.substring(0, charIndex + 1);
-        charIndex++;
-    }
-
-    if (!isDeleting && charIndex === currentPhrase.length) {
-        isDeleting = true;
-        setTimeout(typeEffect, 2000);
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        setTimeout(typeEffect, 500);
-    } else {
-        setTimeout(typeEffect, isDeleting ? 50 : 100);
-    }
-}
-
-// Переключение между экранами
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -40,63 +8,220 @@ function showScreen(screenId) {
     document.getElementById(screenId).classList.add('active');
 }
 
-// Обработка ввода номера телефона
-function initPhoneInput() {
-    const phoneInput = document.getElementById('phone-number');
-    const getCodeBtn = document.getElementById('get-code-btn');
-    
-    phoneInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        
-        let formattedValue = '';
-        if (value.length > 0) formattedValue = '+7 ';
-        if (value.length > 1) formattedValue += value.slice(1, 4);
-        if (value.length > 4) formattedValue += ' ' + value.slice(4, 7);
-        if (value.length > 7) formattedValue += ' ' + value.slice(7, 9);
-        if (value.length > 9) formattedValue += ' ' + value.slice(9, 11);
-        
-        e.target.value = formattedValue;
-        
-        // Активация кнопки при вводе 11 цифр
-        getCodeBtn.disabled = value.length !== 11;
+// Навигация по вкладкам в главном меню
+function initMainTabs() {
+    const menuBtns = document.querySelectorAll('.menu-btn');
+    const tabs = {
+        chats: document.getElementById('chats-tab'),
+        profile: document.getElementById('profile-tab'),
+        settings: document.getElementById('settings-tab')
+    };
+
+    function activateTab(tabId) {
+        Object.values(tabs).forEach(tab => tab.classList.remove('active'));
+        tabs[tabId].classList.add('active');
+        menuBtns.forEach(btn => {
+            if (btn.dataset.tab === tabId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    menuBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            activateTab(btn.dataset.tab);
+        });
     });
+    
+    // Активируем вкладку чатов по умолчанию
+    activateTab('chats');
 }
 
-// Обработка кнопок языка
-function initLanguageButtons() {
-    const langBtns = document.querySelectorAll('.lang-btn');
-    langBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            langBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const lang = btn.getAttribute('data-lang');
-            console.log(`Язык изменён на: ${lang === 'ru' ? 'Русский' : 'English'}`);
-            // Здесь позже будет реальная смена языка
+// ---------- ЛОГИКА ВХОДА ----------
+function initAuth() {
+    const phoneInput = document.getElementById('phone-number');
+    const requestBtn = document.getElementById('request-code-btn');
+    const backFromLogin = document.getElementById('back-from-login');
+    const backFromCode = document.getElementById('back-from-code');
+    const codeInput = document.getElementById('code-input');
+    const verifyBtn = document.getElementById('verify-code-btn');
+    const startBtn = document.getElementById('start-btn');
+
+    // Форматирование номера
+    phoneInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 10) value = value.slice(0,10);
+        e.target.value = value;
+        requestBtn.disabled = value.length !== 10;
+    });
+
+    // Кнопка "Продолжить" на экране номера
+    requestBtn.addEventListener('click', () => {
+        if (phoneInput.value.length === 10) {
+            currentPhone = `+7 ${phoneInput.value.slice(0,3)} ${phoneInput.value.slice(3,6)} ${phoneInput.value.slice(6,8)} ${phoneInput.value.slice(8,10)}`;
+            showScreen('code-screen');
+        }
+    });
+
+    // Проверка кода
+    codeInput.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/\D/g, '');
+        if (val.length > 4) val = val.slice(0,4);
+        e.target.value = val;
+        verifyBtn.disabled = val.length !== 4;
+    });
+
+    verifyBtn.addEventListener('click', () => {
+        const code = document.getElementById('code-input').value;
+        if (code === '1234') {
+            // Успешный вход
+            showScreen('main-screen');
+            initMainTabs();
+            loadUserData(); // Загружаем данные в профиль
+        } else {
+            alert('Неверный код. Попробуйте 1234');
+        }
+    });
+
+    startBtn.addEventListener('click', () => {
+        showScreen('login-screen');
+    });
+
+    backFromLogin.addEventListener('click', () => showScreen('splash-screen'));
+    backFromCode.addEventListener('click', () => showScreen('login-screen'));
+}
+
+// ---------- ПРОФИЛЬ: ЗАГРУЗКА И РЕДАКТИРОВАНИЕ ----------
+function loadUserData() {
+    // Загружаем данные из localStorage или ставим по умолчанию
+    const savedName = localStorage.getItem('shrifft_name') || 'Иван';
+    const savedStatus = localStorage.getItem('shrifft_status') || 'Онлайн';
+    const savedPhone = localStorage.getItem('shrifft_phone') || currentPhone || '+7 123 456 78 90';
+    
+    document.getElementById('profile-name').innerText = savedName;
+    document.getElementById('profile-status').innerText = savedStatus;
+    document.getElementById('info-name').innerText = savedName;
+    document.getElementById('info-status').innerText = savedStatus;
+    document.getElementById('info-phone').innerText = savedPhone;
+}
+
+function saveUserData(field, value) {
+    if (field === 'name') {
+        localStorage.setItem('shrifft_name', value);
+        document.getElementById('profile-name').innerText = value;
+        document.getElementById('info-name').innerText = value;
+    } else if (field === 'status') {
+        localStorage.setItem('shrifft_status', value);
+        document.getElementById('profile-status').innerText = value;
+        document.getElementById('info-status').innerText = value;
+    } else if (field === 'phone') {
+        localStorage.setItem('shrifft_phone', value);
+        document.getElementById('info-phone').innerText = value;
+    }
+}
+
+function initProfileEditing() {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const field = btn.dataset.field;
+            let currentValue = '';
+            if (field === 'name') currentValue = localStorage.getItem('shrifft_name') || 'Иван';
+            if (field === 'status') currentValue = localStorage.getItem('shrifft_status') || 'Онлайн';
+            if (field === 'phone') currentValue = localStorage.getItem('shrifft_phone') || (currentPhone || '+7 123 456 78 90');
+            
+            const newValue = prompt(`Введите новый ${field}`, currentValue);
+            if (newValue && newValue.trim()) {
+                saveUserData(field, newValue.trim());
+            }
         });
     });
 }
 
-// Запуск при инициализации
+// ---------- ЧАТ (тестовый) ----------
+function initTestChat() {
+    const chatWindow = document.getElementById('chat-window');
+    const closeBtn = document.getElementById('close-chat');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-msg-btn');
+    const messagesContainer = document.getElementById('chat-messages');
+    const chatItem = document.querySelector('.chat-item');
+
+    // Открыть чат
+    chatItem.addEventListener('click', () => {
+        chatWindow.classList.remove('hidden');
+        // Прокрутить вниз, если есть сообщения
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+
+    // Закрыть чат
+    closeBtn.addEventListener('click', () => {
+        chatWindow.classList.add('hidden');
+    });
+
+    // Отправить сообщение
+    function sendMessage() {
+        const text = chatInput.value.trim();
+        if (text === "") return;
+        
+        // Добавляем наше сообщение
+        addMessage(text, 'outgoing');
+        chatInput.value = '';
+        
+        // Имитация ответа через 1 секунду
+        setTimeout(() => {
+            const autoReply = getAutoReply(text);
+            addMessage(autoReply, 'incoming');
+        }, 800);
+    }
+    
+    function addMessage(text, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', type);
+        msgDiv.innerText = text;
+        messagesContainer.appendChild(msgDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    function getAutoReply(userMsg) {
+        const msg = userMsg.toLowerCase();
+        if (msg.includes('привет') || msg.includes('здарова')) return 'Привет! Рад, что ты тестируешь Шрифт.';
+        if (msg.includes('как дела')) return 'Отлично, осваиваюсь в новом мессенджере! А у тебя?';
+        if (msg.includes('шифрование')) return 'Скоро здесь будет мощная защита. Следи за новостями!';
+        if (msg.includes('дизайн')) return 'Дизайн уникальный, правда? Мы с создателем постарались.';
+        return 'Интересно... Расскажи ещё что-нибудь о себе или проекте.';
+    }
+    
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
+
+// ---------- СОХРАНЕНИЕ НАСТРОЕК (пока просто заглушка) ----------
+function initSettings() {
+    const checkboxes = document.querySelectorAll('.setting-checkbox');
+    checkboxes.forEach(cb => {
+        // Загружаем сохранённое состояние
+        const key = `setting_${cb.parentElement.parentElement.innerText.trim()}`;
+        const saved = localStorage.getItem(key);
+        if (saved === 'true') cb.checked = true;
+        
+        cb.addEventListener('change', () => {
+            const settingName = cb.parentElement.parentElement.innerText.trim();
+            localStorage.setItem(`setting_${settingName}`, cb.checked);
+            console.log(`Настройка "${settingName}" изменена на ${cb.checked}`);
+            // Здесь позже будет реальная логика киберфишек
+        });
+    });
+}
+
+// ---------- ЗАПУСК ----------
 document.addEventListener('DOMContentLoaded', () => {
-    // Запускаем эффект печати
-    typeEffect();
-    
-    // Назначаем обработчик кнопки "Продолжить"
-    document.getElementById('get-started-btn').addEventListener('click', () => {
-        showScreen('login-screen');
-    });
-    
-    // Инициализируем остальные компоненты
-    initPhoneInput();
-    initLanguageButtons();
-    
-    // Обработка кнопки "Получить код"
-    document.getElementById('get-code-btn').addEventListener('click', () => {
-        const phone = document.getElementById('phone-number').value;
-        if (phone.length > 5) {
-            alert(`Код отправлен на номер ${phone}`);
-            // Здесь позже будет реальная отправка SMS
-        }
-    });
+    initAuth();
+    initProfileEditing();
+    initTestChat();
+    initSettings();
 });
