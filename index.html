@@ -7,20 +7,65 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo-container">
-            <div class="sh-letter">Ш</div>
-            <div class="logo-text">ШИФР</div>
+    <!-- Страница приветствия -->
+    <div id="welcomePage" class="page active">
+        <div class="container">
+            <div class="logo-container">
+                <div class="sh-letter">Ш</div>
+                <div class="logo-text">ШИФР</div>
+            </div>
+            
+            <div class="slogan-container">
+                <span id="slogan" class="slogan"></span>
+                <span class="cursor">|</span>
+            </div>
+            
+            <button id="continueBtn" class="continue-btn">Продолжить</button>
+            
+            <button id="langToggle" class="lang-btn">English</button>
         </div>
-        
-        <div class="slogan-container">
-            <span id="slogan" class="slogan"></span>
-            <span class="cursor">|</span>
+    </div>
+
+    <!-- Страница авторизации -->
+    <div id="authPage" class="page">
+        <div class="auth-container">
+            <div class="auth-back-btn" id="backBtn">
+                <span class="back-arrow">←</span>
+                <span class="back-text">Назад</span>
+            </div>
+            
+            <div class="auth-logo">Ш</div>
+            
+            <h1 class="auth-title">Вход в ШИФР</h1>
+            <p class="auth-subtitle">Введите номер телефона для авторизации</p>
+            
+            <div class="phone-input-container">
+                <div class="phone-prefix">+7</div>
+                <input 
+                    type="tel" 
+                    id="phoneInput" 
+                    class="phone-input" 
+                    placeholder="___ ___-__-__"
+                    maxlength="10"
+                    inputmode="numeric"
+                >
+                <div class="input-glow"></div>
+            </div>
+            
+            <div class="phone-mask" id="phoneMask"></div>
+            
+            <button id="getCodeBtn" class="get-code-btn" disabled>
+                <span class="btn-text">Получить код</span>
+                <span class="btn-loader"></span>
+            </button>
+            
+            <div class="auth-footer">
+                <span class="lock-icon">🔒</span>
+                <span class="footer-text">Шифрование end-to-end</span>
+            </div>
+            
+            <div class="digital-rain"></div>
         </div>
-        
-        <button id="continueBtn" class="continue-btn">Продолжить</button>
-        
-        <button id="langToggle" class="lang-btn">English</button>
     </div>
     
     <script src="script.js"></script>
