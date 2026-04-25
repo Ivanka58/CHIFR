@@ -1,247 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Шрифт</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ШИФР — защищённый мессенджер</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-
-    <!-- ============ SPLASH SCREEN ============ -->
-    <div id="splash-screen" class="screen active">
-        <div class="splash-content">
-            <div class="logo-container">
-                <img src="logo.png" alt="Шрифт" class="splash-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                <div class="logo-fallback" style="display:none;">Ш</div>
-            </div>
-            <h1 class="app-name">ШРИФТ</h1>
-            <p class="slogan" id="slogan-text">Безопасность превыше всего</p>
-            <div class="splash-loader">
-                <div class="loader-bar"></div>
-            </div>
+    <div class="container">
+        <div class="logo-container">
+            <div class="sh-letter">Ш</div>
+            <div class="logo-text">ШИФР</div>
         </div>
-    </div>
-
-
-    <!-- ============ LOGIN SCREEN ============ -->
-    <div id="login-screen" class="screen">
-        <div class="auth-container">
-            <div class="auth-header">
-                <div class="logo-small">Ш</div>
-                <h2>Вход в Шрифт</h2>
-                <p>Введите номер телефона</p>
-            </div>
-            <div class="input-group">
-                <input type="tel" id="phone-input" placeholder="+7 (___) ___-__-__" maxlength="18" autocomplete="off">
-            </div>
-            <button id="login-btn" class="btn-primary" disabled>
-                <span>Получить код</span>
-                <span class="btn-arrow">➤</span>
-            </button>
-        </div>
-    </div>
-
-
-    <!-- ============ CODE SCREEN ============ -->
-    <div id="code-screen" class="screen">
-        <div class="auth-container">
-            <button class="btn-back" id="back-to-login">←</button>
-            <div class="auth-header">
-                <div class="logo-small">Ш</div>
-                <h2>Подтверждение</h2>
-                <p>Введите код из SMS</p>
-                <p class="phone-display" id="phone-display"></p>
-            </div>
-            <div class="code-inputs">
-                <input type="text" class="code-digit" maxlength="1" data-index="0">
-                <input type="text" class="code-digit" maxlength="1" data-index="1">
-                <input type="text" class="code-digit" maxlength="1" data-index="2">
-                <input type="text" class="code-digit" maxlength="1" data-index="3">
-            </div>
-            <button id="verify-btn" class="btn-primary" disabled>
-                <span>Подтвердить</span>
-                <span class="btn-arrow">➤</span>
-            </button>
-            <p class="resend-code">Отправить код повторно через <span id="timer">59</span>с</p>
-        </div>
-    </div>
-
-
-    <!-- ============ MAIN SCREEN ============ -->
-    <div id="main-screen" class="screen">
         
-        <!-- Верхняя шапка -->
-        <div class="main-header">
-            <div class="header-logo">
-                <img src="logo.png" alt="Шрифт" class="header-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                <div class="header-logo-fallback" style="display:none;">Ш</div>
-            </div>
-            <h3 class="header-title">Шрифт</h3>
+        <div class="slogan-container">
+            <span id="slogan" class="slogan"></span>
+            <span class="cursor">|</span>
         </div>
-
-
-        <!-- ===== ВКЛАДКА ЧАТЫ ===== -->
-        <div id="tab-chats" class="tab-content active">
-            <div class="search-bar">
-                <input type="text" placeholder="Поиск..." class="search-input">
-            </div>
-            <div class="chats-list">
-                <div class="chat-card" id="chat-test">
-                    <div class="chat-avatar">Ш</div>
-                    <div class="chat-info">
-                        <div class="chat-name-row">
-                            <span class="chat-name">Шрифт Тест</span>
-                            <span class="verified-badge" id="chat-verified">✓</span>
-                        </div>
-                        <p class="chat-preview">Нажмите, чтобы начать диалог...</p>
-                    </div>
-                    <div class="chat-meta">
-                        <span class="chat-time">Сейчас</span>
-                        <span class="unread-count">1</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- ===== ВКЛАДКА ПРОФИЛЬ ===== -->
-        <div id="tab-profile" class="tab-content">
-            <div class="profile-section">
-                <div class="profile-avatar-large" id="profile-avatar">Ш</div>
-                <div class="profile-field">
-                    <label>Имя</label>
-                    <div class="editable-field">
-                        <span id="user-name">Пользователь</span>
-                        <button class="btn-edit" data-field="name">✎</button>
-                    </div>
-                </div>
-                <div class="profile-field">
-                    <label>Статус</label>
-                    <div class="editable-field">
-                        <span id="user-status">В сети</span>
-                        <button class="btn-edit" data-field="status">✎</button>
-                    </div>
-                </div>
-                <div class="profile-field">
-                    <label>Телефон</label>
-                    <div class="editable-field">
-                        <span id="user-phone">+7 (000) 000-00-00</span>
-                        <button class="btn-edit" data-field="phone">✎</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- ===== ВКЛАДКА НАСТРОЙКИ ===== -->
-        <div id="tab-settings" class="tab-content">
-            <div class="settings-list">
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-name">Двойное дно</span>
-                        <span class="setting-desc">Скрытый режим работы</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-name">Маскировка иконки</span>
-                        <span class="setting-desc">Переименовать приложение</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-name">Панический код</span>
-                        <span class="setting-desc">Скрыть все данные</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Нижнее меню -->
-        <nav class="bottom-nav">
-            <button class="nav-btn active" data-tab="chats">
-                <span class="nav-icon">💬</span>
-                <span class="nav-label">Чаты</span>
-            </button>
-            <button class="nav-btn" data-tab="profile">
-                <span class="nav-icon">👤</span>
-                <span class="nav-label">Профиль</span>
-            </button>
-            <button class="nav-btn" data-tab="settings">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label">Настройки</span>
-            </button>
-        </nav>
+        
+        <button id="continueBtn" class="continue-btn">Продолжить</button>
+        
+        <button id="langToggle" class="lang-btn">English</button>
     </div>
-
-
-    <!-- ============ CHAT SCREEN (полноэкранный блок) ============ -->
-    <div id="chat-screen" class="screen overlay-screen">
-        <div class="chat-header">
-            <button class="btn-back-chat" id="back-from-chat">←</button>
-            <div class="chat-header-info" id="chat-header-info">
-                <span class="chat-header-name" id="chat-header-name">Шрифт Тест</span>
-                <span class="verified-badge-header" id="header-verified">✓</span>
-            </div>
-            <div style="width:40px;"></div>
-        </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="message bot-message">
-                <div class="message-bubble">Привет! Я бот Шрифт. Напиши мне что-нибудь.</div>
-                <span class="message-time">Сейчас</span>
-            </div>
-        </div>
-        <div class="chat-input-area" id="chat-input-area">
-            <input type="text" id="message-input" placeholder="Сообщение..." maxlength="500">
-            <button id="send-btn" class="btn-send">➤</button>
-        </div>
-    </div>
-
-
-    <!-- ============ CONTACT PROFILE SCREEN ============ -->
-    <div id="contact-profile-screen" class="screen overlay-screen">
-        <div class="chat-header">
-            <button class="btn-back-chat" id="back-from-contact">←</button>
-            <h3 class="contact-profile-title">Профиль</h3>
-            <button class="btn-menu" id="contact-menu-btn">⋮</button>
-        </div>
-        <div class="contact-profile-content">
-            <div class="contact-avatar-large" id="contact-avatar">Ш</div>
-            <h2 class="contact-name-large" id="contact-profile-name">Шрифт Тест</h2>
-            <div class="contact-detail">
-                <span class="detail-label">Телефон</span>
-                <span class="detail-value" id="contact-phone">+49 123 456 7890</span>
-            </div>
-            <div class="contact-detail">
-                <span class="detail-label">Статус</span>
-                <span class="detail-value" id="contact-status">Верифицирован</span>
-            </div>
-        </div>
-        <!-- Меню три точки -->
-        <div class="dropdown-menu" id="contact-dropdown">
-            <button class="dropdown-item" id="action-verify">Верифицировать</button>
-            <button class="dropdown-item" id="action-unverify">Снять верификацию</button>
-            <button class="dropdown-item dropdown-item-danger" id="action-ban-temp">Забанить на время</button>
-            <button class="dropdown-item dropdown-item-danger" id="action-ban-perm">Забанить навсегда</button>
-        </div>
-    </div>
-
-
+    
     <script src="script.js"></script>
 </body>
 </html>
